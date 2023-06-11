@@ -1,4 +1,4 @@
-package com.example.weatherapp.screen
+package com.example.weatherapp.ui.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -16,6 +16,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -30,10 +31,11 @@ import com.example.weatherapp.R
 import com.example.weatherapp.models.TopNewsArticle
 import com.example.weatherapp.models.getAllArticleCategory
 import com.example.weatherapp.network.NewsManager
+import com.example.weatherapp.ui.MainViewModel
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
-fun Categories(onFetchCategory: (String) -> Unit={}, newsManager: NewsManager) {
+fun Categories(onFetchCategory: (String) -> Unit={}, viewModel: MainViewModel) {
     val tabsItem = getAllArticleCategory()
 
     Column {
@@ -43,12 +45,12 @@ fun Categories(onFetchCategory: (String) -> Unit={}, newsManager: NewsManager) {
                 CategoryTab(
                     category = category.categoryName,
                     onFetchCategory = onFetchCategory,
-                    isSelected = newsManager.selectedCategory.value == category
+                    isSelected = viewModel.selectedCategory.collectAsState().value == category
                 )
             }
         }
 
-        ArticleContent(articles = newsManager.getArticlesByCategory.value.articles ?: listOf())
+        ArticleContent(articles = viewModel.getArticlesByCategory.collectAsState().value.articles ?: listOf())
     }
 }
 

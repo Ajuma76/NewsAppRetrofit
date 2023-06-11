@@ -1,4 +1,4 @@
-package com.example.weatherapp.screen
+package com.example.weatherapp.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -35,7 +35,7 @@ import com.skydoves.landscapist.coil.CoilImage
 fun DetailScreen(article: TopNewsArticle, scrollState : ScrollState, navController: NavController){
 
     Scaffold(topBar =
-    { DetailTopAppBar(onBackPressed = {navController.popBackStack()} )}) {
+    { DetailTopAppBar(onBackPressed = {navController.popBackStack()} ) }) {
         Column(modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)

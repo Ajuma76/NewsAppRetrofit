@@ -1,4 +1,4 @@
-package com.example.weatherapp.screen
+package com.example.weatherapp.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +27,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.components.SearchBar
 import com.example.weatherapp.models.TopNewsArticle
 import com.example.weatherapp.network.NewsManager
+import com.example.weatherapp.ui.MainViewModel
 import com.skydoves.landscapist.coil.CoilImage
 import retrofit2.http.Query
 
@@ -33,17 +35,17 @@ import retrofit2.http.Query
 fun TopNews(navController: NavController,
             article: List<TopNewsArticle>,
             query: MutableState<String>,
-            newsManager: NewsManager) {
+            viewModel: MainViewModel) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 //        Text(text = "Top News", fontWeight = FontWeight.SemiBold)
-        SearchBar(query = query, newsManager = newsManager)
+        SearchBar(query = query, viewModel = viewModel)
         val searchedText = query.value
         val resultList = mutableListOf<TopNewsArticle>()
         if (searchedText != ""){
-            resultList.addAll(newsManager.searchedNewsResponse.value.articles ?: article)
+            resultList.addAll(viewModel.searchedNewsResponse.collectAsState().value.articles ?: article)
         }else{
             resultList.addAll(article)
         }

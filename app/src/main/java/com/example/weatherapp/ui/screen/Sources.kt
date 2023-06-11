@@ -1,4 +1,4 @@
-package com.example.weatherapp.screen
+package com.example.weatherapp.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,10 +39,11 @@ import androidx.compose.ui.unit.dp
 import com.example.weatherapp.R
 import com.example.weatherapp.models.TopNewsArticle
 import com.example.weatherapp.network.NewsManager
+import com.example.weatherapp.ui.MainViewModel
 import java.net.URL
 
 @Composable
-fun Sources(newsManager: NewsManager){
+fun Sources(viewModel: MainViewModel){
     val items = listOf(
         "TechCrunch" to "techcrunch",
         "TalkSport" to "talksport",
@@ -53,7 +55,7 @@ fun Sources(newsManager: NewsManager){
 
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text(text = "${newsManager.sourceName.value}  Source")},
+        TopAppBar(title = { Text(text = "${viewModel.sourceName.collectAsState().value}  Source")},
             actions = {
                 var menuExpanded by remember { mutableStateOf(false) }
                 IconButton(onClick = { menuExpanded = true }) {
@@ -63,7 +65,7 @@ fun Sources(newsManager: NewsManager){
                     DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded=false }) {
                         items.forEach{
                             DropdownMenuItem(onClick = {
-                                newsManager.sourceName.value = it.second
+                                viewModel.sourceName.value = it.second
                                 menuExpanded = false
                             }) {
                                 Text(it.first)
@@ -75,10 +77,9 @@ fun Sources(newsManager: NewsManager){
         )
     })
     {
-        newsManager.getArticlesBySources()
-        val articles = newsManager.getArticlesBySources.value
+        viewModel.getArticleBySource()
+        val articles = viewModel.getArticlesBySource.collectAsState().value
         SourceContent(articles = articles.articles ?: listOf())
-        Text(text = "allan")
     }
 }
 
